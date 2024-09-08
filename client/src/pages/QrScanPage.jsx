@@ -1,44 +1,50 @@
+import React, { useEffect, useState } from "react";
+import { Html5QrcodeScanner } from "html5-qrcode";
 import axios from "axios";
-import { useState } from "react";
 
-const QrScanPage = () => {
-  const [rollNo, setRollNo] = useState("");  // Roll number from QR code
-  const [isScanned, setIsScanned] = useState(false);  // Show tick button after scanning
+const daysOfWeek = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+const QrScanPage = ({ busId }) => {
+  const [count, setCount] = useState(0);
+  const [res, setRes] = useState(null);
 
-  // Mock function to simulate QR code scanning and extracting rollNo
-  const scanQR = () => {
-    const scannedRollNo = "12345";  // Replace this with actual QR scanning logic
-    setRollNo(scannedRollNo);
-    setIsScanned(true);  // Show the tick button
-  };
+  const d = new Date();
+  let day = d.getDay();
 
-  // Handle the tick button click to increment count
-  const handleTick = async () => {
-    try {
-      const response = await axios.post("http://localhost:8804/incrementCount", {
-        rollNo
-      });
-
-      if (response.data.success) {
-        alert("Count incremented successfully for roll number: " + rollNo);
-        setIsScanned(false);  // Hide the tick button after increment
-      }
-    } catch (error) {
-      console.error("Error incrementing count", error);
-    }
-  };
+  const today = daysOfWeek[day];
+  useEffect(() => {
+    const html5QrcodeScanner = new Html5QrcodeScanner("reader", {
+      fps: 5,
+      qrbox: { width: 300, height: 300 },
+    });
+    const handleScanSuccess = async (decodedText) => {
+      html5QrcodeScanner.clear();
+      setRes(decodedText);
+      const res = await axios.post(
+        `http://localhost:8804/count/${today}/${busId}`
+      );
+      setCount(res.data);
+      console.log(res.data);
+      alert(`QR Code Scanned: ${decodedText}`);
+    };
+    const handleScanError = (error) => {
+      console.error("QR Code Scan Error: ", error);
+    };
+    html5QrcodeScanner.render(handleScanSuccess, handleScanError);
+  }, []);
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <button onClick={scanQR}>Scan QR Code</button>
-
-      {isScanned && (
-        <div style={{ marginTop: "20px" }}>
-          <h3>Roll Number: {rollNo}</h3>
-          <button onClick={handleTick}>✔ Confirm (Tick)</button>
-        </div>
-      )}
-    </div>
+    <>
+      <div id="reader">Result:{res}</div>
+      <div>Result:{count}</div>
+    </>
   );
 };
 
