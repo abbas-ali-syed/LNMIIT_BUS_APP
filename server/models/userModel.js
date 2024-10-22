@@ -1,12 +1,14 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-    name: {
+    username: {
         type: String,
-        required: true
+        required: true,
+        unique:true,
+
     } , 
 
-    rollNo: {
+    email: {
         type: String,
         required: true
     } ,
@@ -14,9 +16,17 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    role: {
+        type: String,
+        required: true,
+        enum: ["admin","user"],
+    } 
 
-})
+},
+{
+    timestamps:true,
+});
 
 const userModel = new mongoose.model("userModel" , userSchema)
 
