@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import io from 'socket.io-client';
 import Admin from './Admin';
 import UserMap from './UserMap';
@@ -6,31 +6,45 @@ import UserMap from './UserMap';
 const SOCKET_URL = 'http://localhost:8804'; // Adjust if necessary
 
 const Demo = () => {
-  const [positionCard1, setPositionCard1] = useState(null);
-  const [adminPositionCard1, setAdminPositionCard1] = useState(null);
+  const [adminPosition, setAdminPosition] = useState(null);
+  const socket = useRef(null); // Socket instance
 
   useEffect(() => {
-    const socket = io(SOCKET_URL);
+    socket.current = io(SOCKET_URL);
 
-    // Listen for the admin location updates
-    socket.on('adminLocation', (location) => {
-      setAdminPositionCard1(location); // Update admin position
+    // Listen for admin location updates
+    socket.current.on('adminLocation', (location) => {
+      console.log('Admin location received:', location);
+      if (location && location.lat && location.lng) {
+        setAdminPosition(location); // Update admin position
+        localStorage.setItem('adminLocation', JSON.stringify(location)); // Store in local storage
+      } else {
+        setAdminPosition(null); // Clear the location if tracking stops
+      }
     });
 
+    // Load stored location from localStorage
+    const storedLocation = localStorage.getItem('adminLocation');
+    if (storedLocation) {
+      setAdminPosition(JSON.parse(storedLocation));
+    }
+
+    // Cleanup socket on unmount
     return () => {
-      socket.disconnect();
+      socket.current.disconnect();
     };
   }, []);
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-around', margin: '20px' }}>
-        {/* Card 1 */}
+      <div className="py-24"style={{ display: 'flex', justifyContent: 'space-around', margin: '20px' }}>
         <div style={{ border: '1px solid #ccc', borderRadius: '8px', padding: '20px', width: '600px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
-          <h3 style={{ textAlign: 'center', color: '#333' }}>Card 1</h3>
-          <Admin setPosition={setPositionCard1} /> {/* Pass setPosition to Admin */}
-          <UserMap position={positionCard1} adminPosition={adminPositionCard1} /> {/* Pass adminPosition to UserMap */}
-          <p style={{ textAlign: 'center', color: '#555' }}>This card tracks location with a red marker.</p>
+          <h3 style={{ textAlign: 'center', color: '#333' }}>Bus Tracker</h3>
+          <Admin setPosition={setAdminPosition} socket={socket.current} /> {/* Pass socket down */}
+          <UserMap adminPosition={adminPosition} />
+          <p style={{ textAlign: 'center', color: '#555' }}>
+            {adminPosition ? 'Tracking bus location.' : 'Bus currently not in service.'}
+          </p>
         </div>
       </div>
     </div>

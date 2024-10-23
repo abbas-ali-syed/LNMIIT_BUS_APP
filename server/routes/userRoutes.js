@@ -284,5 +284,20 @@ router.get("/bus/:id", async (req, res) => {
   }
 });
 
+// status update wala route 
+router.patch('/api/buses/:id/status', (req, res) => {
+  const busId = req.params.id;
+  const status = req.body.status;
+
+  
+  Bus.findByIdAndUpdate(busId, { status }, (err, bus) => {
+    if (err) {
+      res.status(500).send({ message: 'Error updating bus status' });
+    } else {
+      res.send({ message: 'Bus status updated successfully' });
+    }
+  });
+});
+
 
 export default router;

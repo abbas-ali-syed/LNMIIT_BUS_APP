@@ -41,6 +41,8 @@ const Bus = () => {
 
   useEffect(() => {
     fetchBusData();
+    console.log("Bus data updated:", busData);
+
   }, [id]);
 
   useEffect(() => {
@@ -69,6 +71,7 @@ const Bus = () => {
       const response = await axios.get(`http://localhost:8804/api/users/bus/${id}`);
       console.log("Received bus data:", response.data);
       setBusData(response.data);
+      console.log("Updated bus data:", busData);
     } catch (error) {
       console.error("Error fetching bus data:", error.response ? error.response.data : error.message);
     }

@@ -33,7 +33,7 @@ const SignUp = () => {
     };
 
     return (
-        <div className="flex h-screen items-center justify-center p-6 bg-purple-500">
+        <div className="flex h-screen items-center justify-center p-6 bg-gradient-to-r from-rose-400 to-orange-300">
             <div className="form flex flex-col p-6 bg-white rounded-lg shadow-lg w-full max-w-md">
                 <div className="heading text-2xl font-bold text-center mb-6">CREATE AN ACCOUNT</div>
                 <form onSubmit={handleSignup}>

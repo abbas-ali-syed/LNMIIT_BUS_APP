@@ -14,7 +14,8 @@ import { useEffect, useState } from 'react';
 import Schedule from "./pages/Schedule";
 import { useNavigate } from 'react-router-dom'
 import SignUp from "./pages/SignUp";
-
+//import Location from "./pages/Location";
+import Cards from "./pages/Cards";
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
 
@@ -47,6 +48,8 @@ function App() {
           <Route path="/login" element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
           <Route path="/signup" element={<SignUp/>} />
           <Route path="/schedule" element={<Schedule />} />
+          <Route path="/cards" element={<Cards />} />
+          <Route path="/location" element={<Location />} />
           <Route path="/schedule/bus/:id" element={<Bus />} />
 
             <Route path="/qrpage/:rollNo" element={<QrPage />} />

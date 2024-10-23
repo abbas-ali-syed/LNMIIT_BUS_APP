@@ -97,13 +97,12 @@ const Schedule = () => {
   console.log('Buses state:', buses);
 
   return (
-    <div>
-      <div className="grid grid-cols-3 gap-4 p-4 m-10 min-h-screen">
-        {buses.map((bus) => (
-          <div key={bus.id} className="bg-base-100 shadow-xl p-4 min-w-[300px]">
-            <BusComponent bus={bus} updateBusCount={updateBusCount} />
-          </div>
-        ))}
+    <div className="bg-gradient-to-r from-slate-900 to-slate-700">
+      <div className="grid grid-cols-3 gap-4 py-14 p-auto m-auto min-h-screen">
+      {buses.map((bus, index) => (
+  <BusComponent bus={bus} key={bus.id} index={index} />
+))}
+
       </div>
     </div>
   );

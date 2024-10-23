@@ -1,74 +1,84 @@
-// import React from "react";
-// import Demo from "./Demo";
-// import { Link } from "react-router-dom";
-
-// const BusComponent = ({ bus }) => {
-//   console.log('Bus props:', bus);
-
-//   return (
-//     <div className="card bg-base-100 w-96 shadow-xl">
-//       {/* <figure>
-//         <img
-//           src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-//           alt="Shoes"
-//         />
-//       </figure> */}
-//       <div className="card-body">
-//         <h2 className="card-title">Bus {bus.id}</h2>
-//         <div>
-//           {bus.start} ---- {bus.destination}
-//           <div>Seats Left {bus.count}</div>
-          
-//           {bus.time} 
-//         </div>
-//         <div className="card-actions justify-end">
-//         <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"> <Link to={`bus/${bus.id}`} className="btn btn-primary">
-//             Generate QR code
-//           </Link></button>
-//           <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">  <Link to="/demo" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-//             Bus Live Tracking
-//           </Link></button>
-         
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-// export default BusComponent;
 import React from "react";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from 'react';
 
-const BusComponent = ({ bus }) => {
+const BusComponent = ({ bus, index, refreshBusData }) => {
   const userRole = localStorage.getItem('role');
   const isAdmin = userRole === "admin";
 
+ 
+  const colors = [
+    "bg-blue-500",
+    "bg-red-500",
+    "bg-green-500",
+    "bg-yellow-500",
+    "bg-purple-500",
+    "bg-orange-500",
+    "bg-teal-500",
+    "bg-gray-500",
+  ];
+  const [status, setStatus] = useState(bus.status);
+
+  const handleStatusChange = async (e) => {
+    const newStatus = e.target.value;
+    setStatus(newStatus);
+    try {
+      const response = await fetch(`http://localhost:8804/api/users/buses/${bus.id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (response.ok) {
+        refreshBusData(); // Call the refresh function after successful update
+      }
+    } catch (error) {
+      console.error('Error updating bus status:', error);
+    }
+  };
+
+  const colorClass = colors[index % colors.length]; // Cycle through colors based on index
+  useEffect(() => {
+    if (status) {
+      fetch(`http://localhost:8804/api/buses/${bus.id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data))
+        .catch((error) => console.error(error));
+    }
+  }, [status]);
   return (
-    <div className="card bg-base-100 w-96 shadow-xl">
-      <div className="card-body">
-        <h2 className="card-title">Bus {bus.id}</h2>
-        <div>
+    <div className={`${colorClass} text-white mb-2 mx-4 rounded-lg shadow-lg w-100`}>
+      {isAdmin &&<div>
+  <input type="radio" id="red" name="status" value="Cancelled" onChange={handleStatusChange} />
+  <label className="red">Cancelled</label>
+  <input type="radio" id="green" name="status" value="On time" onChange={handleStatusChange} />
+  <label className="green">On Time</label>
+  <input type="radio" id="yellow" name="status" value="Delayed" onChange={handleStatusChange} />
+  <label className ="yellow">Delayed</label>
+</div>}
+      <div className="p-4">
+        <h2 className="text-lg font-bold">Bus {bus.id}</h2>
+        <div className="font-bold">
           {bus.start} ---- {bus.destination}
-          <div>Seats Left {bus.capacity - bus.count}</div>
+          <div>Seats Left: {bus.capacity - bus.count}</div>
+          <div>Status: {status}</div>
           {bus.time} 
         </div>
-        <div className="card-actions justify-end">
+        <div className="flex justify-end mt-4">
           {isAdmin && (
-            <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-              <Link to={`/schedule/bus/${bus.id}`} className="btn btn-primary">
-                Generate QR code
-              </Link>
-            </button>
+            <Link to={`/schedule/bus/${bus.id}`} className="btn border-4 border-white-500 text-white-500 bg-transparent hover:bg-green-500 hover:text-white font-semibold py-1 px-3 rounded-full mr-2 transition-colors duration-200">
+              Generate QR Code
+            </Link>
           )}
-          <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-            <Link to={`/schedule/bus/${bus.id}`} className="btn btn-primary">
-              Scan QR code
-            </Link>
-          </button>
-          <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-            <Link to="/demo" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-              Bus Live Tracking
-            </Link>
-          </button>
+          <Link to={`/schedule/bus/${bus.id}`} className="btn border-4 border-white-500 text-white-500 bg-transparent hover:bg-blue-500 hover:text-white font-semibold py-1 px-3 rounded-full mr-2 transition-colors duration-200">
+            Scan QR Code
+          </Link>
+          <Link to="/demo" className="btn border-4 border-whie-500 text-white-500 bg-transparent hover:bg-purple-500 hover:text-white font-semibold py-1 px-3 rounded-full transition-colors duration-200">
+            Bus Live Tracking
+          </Link>
         </div>
       </div>
     </div>

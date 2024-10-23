@@ -21,7 +21,7 @@ const io = new Server(server, {
   cors: {
     
     origin: '*', // Change to your client app's URL
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST","PUT","PATCH"],
     credentials: true
   },
   transports: ['polling', 'websocket']
@@ -33,25 +33,30 @@ let adminLocation = null;
 io.on('connection', (socket) => {
   console.log('A user connected');
 
-  // Broadcast the admin's location to new clients
+  // Broadcast the admin's location to new clients if available
   if (adminLocation) {
     socket.emit('adminLocation', adminLocation);
   }
 
-  socket.on('updateLocation', async (location) => {
-    try {
-      console.log('Received location update:', location);
-      adminLocation = location;
-      io.emit('adminLocation', adminLocation);
-    } catch (error) {
-      console.error(error);
-    }
+  // Handle location updates from the admin
+  socket.on('updateLocation', (location) => {
+    console.log('Received location update from admin:', location);
+    adminLocation = location;
+    io.emit('adminLocation', adminLocation); // Broadcast to all clients
+  });
+
+  // Handle admin stop tracking event
+  socket.on('stopTracking', () => {
+    console.log('Admin stopped tracking');
+    adminLocation = null;
+    io.emit('adminLocation', null); // Notify all clients that tracking has stopped
   });
 
   socket.on('disconnect', () => {
-    console.log('User disconnected');
+    console.log('A user disconnected');
   });
 });
+
 
 
 

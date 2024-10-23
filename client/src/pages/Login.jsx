@@ -41,7 +41,10 @@ const Login = () => {
     };
 
     return (
-        <div className="flex h-screen items-center justify-center p-6 bg-purple-500">
+        <div className="flex h-screen items-center justify-center p-6 bg-gradient-to-r from-rose-400 to-red-500">
+              <header className="text-center m-auto">
+    <h1 className="text-4xl font-bold text-white">LNMIIT BUS APP</h1>
+  </header>
             <div className="flex bg-white rounded-lg shadow-lg overflow-hidden w-full md:max-w-3xl">
                 <div className="illustration w-3/5 mt-28">
                     <img 
