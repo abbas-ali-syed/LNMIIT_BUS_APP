@@ -11,6 +11,10 @@ const Demo = () => {
 
   useEffect(() => {
     socket.current = io(SOCKET_URL);
+    
+    socket.current.on('connect', () => {
+      console.log('Socket connected:', socket.current.id);
+    });
 
     // Listen for admin location updates
     socket.current.on('adminLocation', (location) => {
