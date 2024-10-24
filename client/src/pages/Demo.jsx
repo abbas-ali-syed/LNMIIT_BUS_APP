@@ -40,7 +40,7 @@ const Demo = () => {
       <div className="py-24"style={{ display: 'flex', justifyContent: 'space-around', margin: '20px' }}>
         <div style={{ border: '1px solid #ccc', borderRadius: '8px', padding: '20px', width: '600px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
           <h3 style={{ textAlign: 'center', color: '#333' }}>Bus Tracker</h3>
-          <Admin setPosition={setAdminPosition} socket={socket.current} /> {/* Pass socket down */}
+          <Admin setPosition={setAdminPosition} socket={socket.current} /> 
           <UserMap adminPosition={adminPosition} />
           <p style={{ textAlign: 'center', color: '#555' }}>
             {adminPosition ? 'Tracking bus location.' : 'Bus currently not in service.'}

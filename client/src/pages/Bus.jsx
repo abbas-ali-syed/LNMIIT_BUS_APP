@@ -44,7 +44,7 @@ const Bus = () => {
   const fetchBusData = async () => {
     try {
       console.log("Fetching bus data for id:", id);
-      const response = await axios.get(`${BASE_URL}/api/users/bus/${id}`);
+      const response = await axios.get(`${BASE_URL}api/users/bus/${id}`);
       console.log("Received bus data:", response.data);
       setBusData(response.data);
       console.log("Updated bus data:", busData);
@@ -65,13 +65,13 @@ const Bus = () => {
     console.log('Decoded result:', decodedResult);
    
     try {
-        // Construct the object to send to the backend
+        
         const qrData = {
-            day: new Date().toLocaleString('en-US', { weekday: 'long' }), // Assuming day can be inferred from the current day
-            busId: JSON.parse(decodedText).busId // Parse the scanned data and extract the busId
+            day: new Date().toLocaleString('en-US', { weekday: 'long' }), 
+            busId: JSON.parse(decodedText).busId 
         };
 
-        // Make the API call to the backend
+        
         const response = await axios.post("${BASE_URL}/api/users/scanBusQR", { qrData });
 
         if (response.data.success) {

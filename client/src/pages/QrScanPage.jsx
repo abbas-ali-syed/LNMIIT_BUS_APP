@@ -28,7 +28,7 @@ const QrScanPage = ({ busId }) => {
       html5QrcodeScanner.clear();
       setRes(decodedText);
       const res = await axios.post(
-        `${BASE_URL}/count/${today}/${busId}`
+        `${BASE_URL}count/${today}/${busId}`
       );
       setCount(res.data);
       console.log(res.data);

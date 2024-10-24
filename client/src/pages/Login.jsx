@@ -61,7 +61,7 @@ const Login = () => {
         <div className="heading text-2xl font-bold text-center mb-6">LOGIN</div>
         <form onSubmit={handleLogin}>
             <div className="mb-4">
-                <label htmlFor="name" className="block mb-2">Name</label>
+                <label htmlFor="name" className="block mb-2">User Name</label>
                 <input 
                     type="text" 
                     id="name" 

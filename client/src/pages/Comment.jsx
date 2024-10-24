@@ -14,7 +14,7 @@ const Comment = ({ comment }) => {
 
   const fetchReplies = async () => {
     try {
-      const response = await axios.get(`/api/users/comments/${comment._id}/replies`);
+      const response = await axios.get(`api/users/comments/${comment._id}/replies`);
       setReplies(response.data);
     } catch (error) {
       console.error(error);
@@ -24,7 +24,7 @@ const Comment = ({ comment }) => {
   const handleReplySubmit = async (text, parentCommentId) => {
     try {
       const response = await axios.post(
-        `/api/users/comments/${parentCommentId}/replies`, 
+        `api/users/comments/${parentCommentId}/replies`, 
         { text },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
       );

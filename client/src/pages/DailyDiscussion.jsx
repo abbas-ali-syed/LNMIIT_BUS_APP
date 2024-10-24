@@ -40,7 +40,7 @@ const DailyDiscussion = () => {
   const fetchComments = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${BASE_URL}/api/users/comments`);
+      const response = await axios.get(`${BASE_URL}api/users/comments`);
       setComments(response.data);
       setLoading(false);
     } catch (err) {

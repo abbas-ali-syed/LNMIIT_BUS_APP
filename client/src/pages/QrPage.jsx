@@ -6,7 +6,7 @@ const QrPage = ({ busId }) => {
   const generateQR = async () => {
     try {
       const response = await axios.get(
-        `${BASE_URL}/generateQR?rollNo=${busId}`
+        `${BASE_URL}generateQR?rollNo=${busId}`
       );
       setQrCode(response.data); // Set the QR code image in state
     } catch (error) {

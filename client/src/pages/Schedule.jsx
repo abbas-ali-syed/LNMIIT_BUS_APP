@@ -13,7 +13,17 @@ const daysOfWeek = [
   "Saturday",
 ];
 
+
 const Schedule = () => {
+  const refreshBusData = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}api/users/bus/${bus.id}`);
+      setBusData(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -40,7 +50,7 @@ const Schedule = () => {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/api/users/schedule/${today}`);
+      const res = await axios.get(`${BASE_URL}api/users/schedule/${today}`);
       if (res.status === 200) {
         console.log("Fetched data:", res.data);
         setBuses(res.data);

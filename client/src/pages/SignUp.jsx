@@ -16,15 +16,15 @@ const SignUp = () => {
         setMessage(''); // Clear previous messages
 
         try {
-            await axios.post(`${BASE_URL}/api/auth/signup`, {
+            await axios.post(`${BASE_URL}api/auth/signup`, {
                 username,
                 email,
                 password,
-                role: 'user' // Add a default role if needed
+                role: 'user' // default role 
             });
 
-            setIsSuccess(true); // Indicate success
-            setMessage('User registered successfully!'); // Success message
+            setIsSuccess(true); 
+            setMessage('User registered successfully!'); 
             navigate("/home"); // Navigate to home page
         } catch (error) {
             setIsSuccess(false); // Indicate failure
@@ -38,7 +38,7 @@ const SignUp = () => {
                 <div className="heading text-2xl font-bold text-center mb-6">CREATE AN ACCOUNT</div>
                 <form onSubmit={handleSignup}>
                     <div className="mb-4">
-                        <label htmlFor="name" className="block mb-2">Name</label>
+                        <label htmlFor="name" className="block mb-2">User Name</label>
                         <input 
                             type="text" 
                             id="name" 
