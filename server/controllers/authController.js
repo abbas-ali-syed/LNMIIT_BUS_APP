@@ -35,8 +35,10 @@ export const login=async(req,res)=>{
     if(!isMatch){
         return res.status(404).json({message:`Password wrong`});
     }
-    const token = jwt.sign({id:user._id, role:user.role},process.env.JWT_SECRET,{expiresIn:"1h"}); 
-    
+    const token = jwt.sign({id:user._id, username: user.username,role:user.role},process.env.JWT_SECRET,{expiresIn:"1h"}); 
+    console.log("Token:", token);  
+    console.log("Decoded Token:", jwt.decode(token));
+
     res.status(200).json({token,role: user.role});
 
     }

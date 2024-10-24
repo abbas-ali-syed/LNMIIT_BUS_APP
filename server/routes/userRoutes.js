@@ -1,12 +1,123 @@
-
-import express from "express";
 import authorizeRoles from "../middlewares/roleMiddleware.js";
-const router= express.Router();
+import express from "express";
+import Comment from "../models/commentModel.js";
 import verifyToken from "../middlewares/authMiddleware.js";
-//Both User Admin
-router.get("/user",verifyToken,authorizeRoles("admin","user"),(req,res)=>{
-    res.json({message:"welcome user"});
+
+const router = express.Router();
+
+// Get all comments
+// Get all comments
+router.get('/comments', async (req, res) => {
+  try {
+    const comments = await Comment.find({ parentId: null }).sort('-createdAt');
+    res.json(comments);
+  } catch (err) {
+    console.error('Error fetching comments:', err);
+    res.status(500).json({ message: 'Error fetching comments', error: err.message });
+  }
 });
+
+// Create a new comment
+// Create a new comment
+router.post('/comments', verifyToken, async (req, res) => {
+  try {
+    const comment = new Comment({
+      text: req.body.text,
+      username: req.user.username,
+      userId: req.user.id
+    });
+    await comment.save();
+    res.status(201).json(comment);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error creating comment', error: err.message });
+  }
+});
+
+// Get a single comment
+router.get('/comments/:id', async (req, res) => {
+  try {
+    const comment = await Comment.findById(req.params.id);
+    if (!comment) {
+      res.status(404).json({ message: 'Comment not found' });
+    } else {
+      res.json(comment);
+    }
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching comment' });
+  }
+});
+
+
+
+// Update a comment
+router.put('/comments/:id', verifyToken, async (req, res) => {
+  try {
+    const comment = await Comment.findById(req.params.id);
+    if (!comment) {
+      return res.status(404).json({ message: 'Comment not found' });
+    }
+    if (comment.userId.toString() !== req.user.id) {
+      return res.status(403).json({ message: 'User not authorized to update this comment' });
+    }
+    comment.text = req.body.text;
+    await comment.save();
+    res.json(comment);
+  } catch (err) {
+    res.status(500).json({ message: 'Error updating comment' });
+  }
+});
+
+// Delete a comment
+router.delete('/comments/:id', verifyToken, async (req, res) => {
+  try {
+    const comment = await Comment.findById(req.params.id);
+    if (!comment) {
+      return res.status(404).json({ message: 'Comment not found' });
+    }
+    if (comment.userId.toString() !== req.user.id) {
+      return res.status(403).json({ message: 'User not authorized to delete this comment' });
+    }
+    await comment.remove();
+    res.json({ message: 'Comment deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error deleting comment' });
+  }
+});
+
+// Get replies for a comment
+router.get('/comments/:id/replies', async (req, res) => {
+  try {
+    const replies = await Comment.find({ parentId: req.params.id }).sort('createdAt');
+    res.json(replies);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching replies' });
+  }
+});
+
+// Add a reply to a comment
+router.post('/comments/:id/replies', verifyToken, async (req, res) => {
+  try {
+    const reply = new Comment({
+      text: req.body.text,
+      username: req.user.username,
+      userId: req.user.id,
+      parentId: req.params.id
+    });
+    await reply.save();
+    res.status(201).json(reply);
+  } catch (err) {
+    res.status(500).json({ message: 'Error creating reply' });
+  }
+});
+
+
+
+
+router.get("/user",verifyToken,authorizeRoles("admin","user"),(req,res)=>{
+  res.json({message:"welcome user"});
+});
+
 const busSchedule = { 
     "Monday": [
       { id: 1, start: "LNMIIT", destination: "Ajmeri Gate", status: "On Time", count: 50, capacity: 100, time: "06:00 AM" },
@@ -136,29 +247,29 @@ router.get("/schedule/:day", async (req, res) => {
     res.status(200).json(schedule);
   });
 
-router.post("/createBus", async (req, res) => {
-    const { day, start, destination, status, count, capacity, time } = req.body;
+// router.post("/createBus", async (req, res) => {
+//     const { day, start, destination, status, count, capacity, time } = req.body;
   
-    const today = await Days.findOne({ name: day });
+//     const today = await Days.findOne({ name: day });
   
-    if (!today) {
-      return res.status(404).json({ message: "Day not found" });
-    }
+//     if (!today) {
+//       return res.status(404).json({ message: "Day not found" });
+//     }
   
-    const newBus = {
-      start,
-      destination,
-      status,
-      count,
-      capacity,
-      time,
-    };
+//     const newBus = {
+//       start,
+//       destination,
+//       status,
+//       count,
+//       capacity,
+//       time,
+//     };
   
-    today.buses.push(newBus);
-    await today.save();
+//     today.buses.push(newBus);
+//     await today.save();
   
-    res.status(201).json(today);
-  });
+//     res.status(201).json(today);
+//   });
   
 
 //Only Admin

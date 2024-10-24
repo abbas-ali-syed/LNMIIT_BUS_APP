@@ -6,7 +6,7 @@ const busSchema = mongoose.Schema({
   destination: { type: String, required: true },
   status: { type: String, default: "On Time" },
   count: { type: Number, default: 0 },
-  capacity: { type: Number, default: 100 },
+  capacity: { type: Number, default: 50 },
   time: { type: String, required: true }
 });
 
