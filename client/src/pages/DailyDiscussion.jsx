@@ -57,7 +57,7 @@ const DailyDiscussion = () => {
         console.error('No token found in local storage');
         return;
       }
-      const response = await axios.post(`${BASE_URL}/api/users/comments`, { text }, { headers: { Authorization: `Bearer ${token}` } });
+      const response = await axios.post(`${BASE_URL}api/users/comments`, { text }, { headers: { Authorization: `Bearer ${token}` } });
       const comment = response.data;
       setComments((prevComments) => [...prevComments, comment]);
     } catch (err) {
