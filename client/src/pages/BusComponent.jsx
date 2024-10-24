@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from 'react';
-
+import { BASE_URL } from "../config";
 const BusComponent = ({ bus, index, refreshBusData }) => {
   const userRole = localStorage.getItem('role');
   const isAdmin = userRole === "admin";
@@ -23,7 +23,7 @@ const BusComponent = ({ bus, index, refreshBusData }) => {
     const newStatus = e.target.value;
     setStatus(newStatus);
     try {
-      const response = await fetch(`http://localhost:8804/api/users/buses/${bus.id}/status`, {
+      const response = await fetch(`${BASE_URL}/api/users/buses/${bus.id}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),

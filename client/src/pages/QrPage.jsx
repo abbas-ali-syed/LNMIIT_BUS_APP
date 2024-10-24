@@ -1,12 +1,12 @@
 import axios from "axios";
 import { useState } from "react";
-
+import { BASE_URL } from "../config";
 const QrPage = ({ busId }) => {
   const [qrCode, setQrCode] = useState("");
   const generateQR = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8804/generateQR?rollNo=${busId}`
+        `${BASE_URL}/generateQR?rollNo=${busId}`
       );
       setQrCode(response.data); // Set the QR code image in state
     } catch (error) {

@@ -4,7 +4,7 @@ import axios from 'axios';
 import busappvecjpeg from "../assets/busappvecjpeg.jpeg";
 import { toast } from "react-hot-toast";
 import SignUp from './SignUp';
-
+import { BASE_URL } from '../config';
 const Login = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -22,7 +22,7 @@ const Login = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:8804/api/auth/login', {
+            const response = await axios.post(`${BASE_URL}/api/auth/login`, {
                 username,
                 email,
                 password

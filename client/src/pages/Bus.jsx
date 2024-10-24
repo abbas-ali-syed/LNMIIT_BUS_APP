@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Html5QrcodeScanner } from "html5-qrcode";
+import { BASE_URL } from '../config';
 import axios from "axios";
 
 const Bus = () => {
@@ -43,7 +44,7 @@ const Bus = () => {
   const fetchBusData = async () => {
     try {
       console.log("Fetching bus data for id:", id);
-      const response = await axios.get(`http://localhost:8804/api/users/bus/${id}`);
+      const response = await axios.get(`${BASE_URL}/api/users/bus/${id}`);
       console.log("Received bus data:", response.data);
       setBusData(response.data);
       console.log("Updated bus data:", busData);
@@ -71,7 +72,7 @@ const Bus = () => {
         };
 
         // Make the API call to the backend
-        const response = await axios.post("http://localhost:8804/api/users/scanBusQR", { qrData });
+        const response = await axios.post("${BASE_URL}/api/users/scanBusQR", { qrData });
 
         if (response.data.success) {
             alert("Bus count increased successfully!");

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import BusComponent from "./BusComponent";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
+import { BASE_URL } from "../config";
 const daysOfWeek = [
   "Sunday",
   "Monday",
@@ -39,7 +40,7 @@ const Schedule = () => {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get(`http://localhost:8804/api/users/schedule/${today}`);
+      const res = await axios.get(`${BASE_URL}/api/users/schedule/${today}`);
       if (res.status === 200) {
         console.log("Fetched data:", res.data);
         setBuses(res.data);

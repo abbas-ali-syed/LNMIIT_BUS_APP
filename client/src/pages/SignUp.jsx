@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import { BASE_URL } from "../config";
 const SignUp = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -16,7 +16,7 @@ const SignUp = () => {
         setMessage(''); // Clear previous messages
 
         try {
-            await axios.post('http://localhost:8804/api/auth/signup', {
+            await axios.post(`${BASE_URL}/api/auth/signup`, {
                 username,
                 email,
                 password,

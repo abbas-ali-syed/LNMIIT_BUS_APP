@@ -2,8 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import io from 'socket.io-client';
 import Admin from './Admin';
 import UserMap from './UserMap';
-
-const SOCKET_URL = 'http://localhost:8804'; // Adjust if necessary
+import { BASE_URL } from '../config';
+const SOCKET_URL = `${BASE_URL}`; // Adjust if necessary
 
 const Demo = () => {
   const [adminPosition, setAdminPosition] = useState(null);

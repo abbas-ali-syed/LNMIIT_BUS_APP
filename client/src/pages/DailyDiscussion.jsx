@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Comment from './Comment';
 import CommentForm from './CommentForm';
-
+import { BASE_URL } from '../config';
 const DailyDiscussion = () => {
 
 
@@ -40,7 +40,7 @@ const DailyDiscussion = () => {
   const fetchComments = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:8804/api/users/comments');
+      const response = await axios.get(`${BASE_URL}/api/users/comments`);
       setComments(response.data);
       setLoading(false);
     } catch (err) {
@@ -57,7 +57,7 @@ const DailyDiscussion = () => {
         console.error('No token found in local storage');
         return;
       }
-      const response = await axios.post('http://localhost:8804/api/users/comments', { text }, { headers: { Authorization: `Bearer ${token}` } });
+      const response = await axios.post(`${BASE_URL}/api/users/comments`, { text }, { headers: { Authorization: `Bearer ${token}` } });
       const comment = response.data;
       setComments((prevComments) => [...prevComments, comment]);
     } catch (err) {

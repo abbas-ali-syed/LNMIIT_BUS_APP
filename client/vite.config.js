@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/comments': 'http://localhost:8804/comments',
+     '/api': 'http://localhost:8804',
     },
   },
 

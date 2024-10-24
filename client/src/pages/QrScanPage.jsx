@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import axios from "axios";
-
+import { BASE_URL } from "../config";
 const daysOfWeek = [
   "Sunday",
   "Monday",
@@ -28,7 +28,7 @@ const QrScanPage = ({ busId }) => {
       html5QrcodeScanner.clear();
       setRes(decodedText);
       const res = await axios.post(
-        `http://localhost:8804/count/${today}/${busId}`
+        `${BASE_URL}/count/${today}/${busId}`
       );
       setCount(res.data);
       console.log(res.data);
