@@ -47,7 +47,7 @@ const Admin = ({ setPosition, socket }) => {
   return (
     <button
     onClick={isTracking ? stopTracking : startTracking}
-    className={`px-4 py-2 font-bold text-white rounded-lg transition-transform ${
+    className={`px-4 py-2 m-2 font-bold text-white rounded-lg transition-transform ${
       isTracking ? 'bg-red-600 hover:bg-red-500' : 'bg-green-600 hover:bg-green-500'
     } active:scale-95`}
   >
