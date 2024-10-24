@@ -6,10 +6,11 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-   '/api': {
-        target: 'https://your-app.render.com',
+      '/api': {
+        target: 'https://lnmiit-bus-app.onrender.com/api',
         changeOrigin: true,
         pathRewrite: { '^/api': '' },
+
       },
     },
   },
