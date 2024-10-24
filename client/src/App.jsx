@@ -10,12 +10,13 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import LandingPage from "./pages/LandingPage";
 import { useEffect, useState } from 'react';
-
+import Contact from "./pages/Contact";
 import Schedule from "./pages/Schedule";
 import { useNavigate } from 'react-router-dom'
 import SignUp from "./pages/SignUp";
 //import Location from "./pages/Location";
 import Cards from "./pages/Cards";
+import DailyDiscussion from "./pages/DailyDiscussion";
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
 
@@ -40,18 +41,21 @@ function App() {
           <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
         )}
           <Routes>
+           
             <Route path="/" element={<Home />} />
+           
             <Route
             path="/home"
             element={<Home />} 
           />
           <Route path="/login" element={<Login setLoggedIn={setLoggedIn} setEmail={setEmail} />} />
           <Route path="/signup" element={<SignUp/>} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/schedule" element={<Schedule />} />
           <Route path="/cards" element={<Cards />} />
           <Route path="/location" element={<Location />} />
           <Route path="/schedule/bus/:id" element={<Bus />} />
-
+          <Route path="/daily-discussion" element={<DailyDiscussion />} />
             <Route path="/qrpage/:rollNo" element={<QrPage />} />
             <Route path="/countPage" element={<CountPage />} />
             <Route path="/scannedPage" element={<QrScanPage />} />

@@ -1,5 +1,5 @@
 import React from "react";
-import backgroundImage from "../assets/lnmiit.jpg"; // Replace with your image path
+import backgroundImage from "../assets/lnmiit.jpg";
 import Navbar from "./Navbar";
 
 export const LandingPage = () => {
@@ -34,12 +34,7 @@ export const LandingPage = () => {
           </div>
         </div>
 
-        <a
-          href="#features"
-          className="mt-6 inline-block bg-blue-600 hover:bg-blue-500 text-white py-3 px-6 rounded transition duration-300 text-lg"
-        >
-          Learn More
-        </a>
+      
       </div>
     </header>
     </div>

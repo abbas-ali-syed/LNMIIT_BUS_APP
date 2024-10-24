@@ -12,6 +12,7 @@
   "dependencies": {
     "@coreui/coreui": "^5.1.2",
     "@coreui/react": "^5.4.0",
+    "@heroicons/react": "^1.0.6",
     "axios": "^1.7.7",
     "html5-qrcode": "^2.3.8",
     "leaflet": "^1.9.4",
