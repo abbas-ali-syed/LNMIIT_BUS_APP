@@ -2,18 +2,16 @@ import React, { useEffect, useState, useRef } from 'react';
 import io from 'socket.io-client';
 import Admin from './Admin';
 import UserMap from './UserMap';
-
-const SOCKET_URL = 'https://lnmiit-bus-app.onrender.com'; // Adjust if necessary
+import { BASE_URL } from '../config';
+const SOCKET_URL = `https://lnmiit-bus-app.onrender.com`; // Adjust if necessary
 
 const Demo = () => {
   const [adminPosition, setAdminPosition] = useState(null);
   const socket = useRef(null); // Socket instance
 
   useEffect(() => {
-    // Initialize the socket connection
     socket.current = io(SOCKET_URL);
-
-    // Handle successful connection
+    
     socket.current.on('connect', () => {
       console.log('Socket connected:', socket.current.id);
     });
@@ -37,23 +35,15 @@ const Demo = () => {
 
     // Cleanup socket on unmount
     return () => {
-      if (socket.current) {
-        socket.current.disconnect();
-      }
+      socket.current.disconnect();
     };
   }, []);
 
-  // Ensure socket is initialized before rendering child components
-  if (!socket.current) {
-    return <p>Initializing socket...</p>;
-  }
-
   return (
     <div>
-      <div className="py-24" style={{ display: 'flex', justifyContent: 'space-around', margin: '20px' }}>
+      <div className="py-24"style={{ display: 'flex', justifyContent: 'space-around', margin: '20px' }}>
         <div style={{ border: '1px solid #ccc', borderRadius: '8px', padding: '20px', width: '600px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
           <h3 style={{ textAlign: 'center', color: '#333' }}>Bus Tracker</h3>
-          {/* Only render Admin if the socket is initialized */}
           <Admin setPosition={setAdminPosition} socket={socket.current} /> 
           <UserMap adminPosition={adminPosition} />
           <p style={{ textAlign: 'center', color: '#555' }}>
