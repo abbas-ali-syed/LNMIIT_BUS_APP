@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import Admin from './Admin';
 import UserMap from './UserMap';
 import { BASE_URL } from '../config';
-const SOCKET_URL = `${BASE_URL}`; // Adjust if necessary
+const SOCKET_URL = `https://lnmiit-bus-app.onrender.com`; // Adjust if necessary
 
 const Demo = () => {
   const [adminPosition, setAdminPosition] = useState(null);
